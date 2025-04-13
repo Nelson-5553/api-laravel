@@ -16,6 +16,11 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::latest()->paginate();
+
+        if ($posts->IsEmpty()){
+            return response()->json(["menssage" => "No hay post disponibles", 200]);
+        }
+
         return new PostCollection($posts);
     }
 
@@ -30,10 +35,20 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Post $post)
+
+    public function show($id)
     {
+        $post = Post::find($id);
+
+        if (!$post) {
+            return response()->json([
+                "message" => "No se encontró el post con ID $id"
+            ], 404);
+        }
+
         return new PostResource($post);
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -48,6 +63,9 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        $post->delete();
+        return response()->json([
+            "menssage" => "Eliminado correctamente"
+        ], 200);
     }
 }
