@@ -19,11 +19,12 @@ class PostResource extends JsonResource
             'post_name' => $this->title,
             'slug' => $this->slug,
             'content' => $this->content,
+            'excerpt' => $this->excerpt,
             'author' => [
-                'name'=>$this->user->name,
-                'email'=>$this->user->email,
+                'name' => $this->user->name,
+                'email' => $this->user->email,
             ],
-            'created_at' => $this->published_at
+            'published_at' => $this->published_at,
         ];
     }
 }

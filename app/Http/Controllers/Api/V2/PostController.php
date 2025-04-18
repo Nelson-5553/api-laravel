@@ -16,7 +16,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::latest()->paginate();
+        $posts = Post::latest()->paginate(9);
 
         if ($posts->IsEmpty()){
             return response()->json(["menssage" => "No hay post disponibles", 200]);

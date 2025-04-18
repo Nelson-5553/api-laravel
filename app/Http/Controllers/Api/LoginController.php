@@ -30,6 +30,15 @@ class LoginController extends Controller
 
     }
 
+    public function logout()
+    {
+        auth()->user()->tokens()->delete();
+
+        return response()->json([
+            'message' => 'Logged out'
+        ]);
+    }
+
     public function validateLogin(Request $request){
         return $request->validate([
             'email' => 'required|email',
