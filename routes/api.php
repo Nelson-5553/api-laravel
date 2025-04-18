@@ -16,7 +16,7 @@ use App\Http\Controllers\Api\LoginController;
     Route::apiResource('v1/posts', PostV1::class)->only('index', 'show', 'destroy')->middleware('auth:sanctum');
 
 //V2
-    Route::apiResource('v2/posts', PostV2::class)->only('index', 'show', 'destroy')->middleware('auth:sanctum');
+    Route::apiResource('v2/posts', PostV2::class)->only('index', 'show', 'destroy', 'store')->middleware('auth:sanctum');
 
 //Login
 

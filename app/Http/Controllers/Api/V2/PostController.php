@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Http\Resources\V2\PostResource;
 use App\Http\Resources\V2\PostCollection;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
@@ -28,9 +29,26 @@ class PostController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        //
-    }
+{
+    $request->validate([
+        'title' => 'required',
+        'slug' => 'required|unique:posts',
+        'content' => 'required',
+    ]);
+
+    $post = Post::create([
+        'title' => $request->title,
+        'slug' => $request->slug,
+        'content' => $request->content,
+        'user_id' => Auth::id(), // ✔ Incluido en la creación
+    ]);
+
+    return response()->json([
+        "message" => "Post creado correctamente",
+        "data" => new PostResource($post)
+    ], 201);
+}
+
 
     /**
      * Display the specified resource.
