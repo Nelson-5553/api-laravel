@@ -86,4 +86,17 @@ class PostController extends Controller
             "menssage" => "Eliminado correctamente"
         ], 200);
     }
+
+    //consejo del dia que se actualizara en la home}
+
+    public function home()
+    {
+        $posts = Post::latest()->take(1)->get();
+
+        if ($posts->IsEmpty()){
+            return response()->json(["menssage" => "No hay consejo del dia disponible", 200]);
+        }
+
+        return new PostCollection($posts);
+    }
 }
