@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
-
+use Carbon\Carbon;
 
 class Post extends Model
 {
@@ -24,7 +24,9 @@ class Post extends Model
     }
 
     public function getPublishedAtAttribute(){
-        return $this->created_at->format('d/m/Y');
+        Carbon::setLocale('es');
+        return $this->created_at->translatedFormat('d \d\e F \d\e Y');
+
     }
 
     public function user(){
