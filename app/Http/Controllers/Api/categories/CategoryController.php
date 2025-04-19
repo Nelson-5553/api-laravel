@@ -15,7 +15,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $category = Category::all();
+        $category = Category::select('name')->get();
 
         if ($category->isEmpty()){
             return response()->json()(["message" => "No hay categorias disponibles"], 200);
