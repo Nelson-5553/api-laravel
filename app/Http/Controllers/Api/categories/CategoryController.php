@@ -1,9 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\categories;
 
+use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Http\Resources\V2\CategoryResource;
+use App\Http\Resources\V2\CategoryCollection;
 
 class CategoryController extends Controller
 {
@@ -12,7 +15,14 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        $category = Category::all();
+
+        if ($category->isEmpty()){
+            return response()->json()(["message" => "No hay categorias disponibles"], 200);
+        }
+
+      return new CategoryCollection($category);
+
     }
 
     /**
