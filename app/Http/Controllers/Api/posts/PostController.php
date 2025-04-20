@@ -16,7 +16,14 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::latest()->paginate(9);
+        $posts = Post::select('id', 'title', 'slug', 'content', 'category_id', 'user_id', 'created_at')
+        ->with([
+        'category:id,name',
+        'user:id,name,email'
+        ])
+        ->latest()
+        ->paginate(9);
+
 
         if ($posts->IsEmpty()){
             return response()->json(["menssage" => "No hay post disponibles", 200]);
@@ -93,7 +100,7 @@ class PostController extends Controller
 
     public function home()
     {
-        $posts = Post::latest()->take(1)->get();
+        $posts = Post::inRandomOrder()->take(1)->get();
 
         if ($posts->IsEmpty()){
             return response()->json(["menssage" => "No hay consejo del dia disponible", 200]);
