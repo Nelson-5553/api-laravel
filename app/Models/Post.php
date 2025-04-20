@@ -15,7 +15,8 @@ class Post extends Model
         'title',
         'slug',
         'content',
-        'user_id'
+        'user_id',
+        'category_id',
     ];
     /** @use HasFactory<\Database\Factories\PostFactory> */
     use HasFactory;

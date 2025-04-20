@@ -34,12 +34,14 @@ class PostController extends Controller
         'title' => 'required',
         'slug' => 'required|unique:posts',
         'content' => 'required',
+        'category_id' => 'required',
     ]);
 
     $post = Post::create([
         'title' => $request->title,
         'slug' => $request->slug,
         'content' => $request->content,
+        'category_id' => $request->category_id,
         'user_id' => Auth::id(), // ✔ Incluido en la creación
     ]);
 
