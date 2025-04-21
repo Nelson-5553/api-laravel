@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\posts\PostController;
 use App\Http\Controllers\Api\login\LoginController;
 use App\Http\Controllers\Api\categories\CategoryController;
+use App\Http\Controllers\Api\login\SigninController;
 
 
 
@@ -21,3 +22,5 @@ Route::middleware('auth:sanctum')->post('logout', [LoginController::class, 'logo
 //  Categorias   */
 
 Route::get('categories', [CategoryController::class, 'index']);
+
+Route::post('signin', [SigninController::class, 'store']);
