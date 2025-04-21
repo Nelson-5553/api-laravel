@@ -21,6 +21,7 @@ class PostController extends Controller
         'category:id,name',
         'user:id,name,email'
         ])
+        ->inRandomOrder()
         ->latest()
         ->paginate(9);
 
