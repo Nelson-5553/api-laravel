@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Http\Resources\V2\PostResource;
 use App\Http\Resources\V2\PostCollection;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
@@ -40,14 +41,13 @@ class PostController extends Controller
 {
     $request->validate([
         'title' => 'required',
-        'slug' => 'required|unique:posts',
         'content' => 'required',
         'category_id' => 'required',
     ]);
 
     $post = Post::create([
         'title' => $request->title,
-        'slug' => $request->slug,
+        'slug' => Str::slug($request->title),
         'content' => $request->content,
         'category_id' => $request->category_id,
         'user_id' => Auth::id(), // ✔ Incluido en la creación
