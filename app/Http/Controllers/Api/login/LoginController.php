@@ -9,27 +9,36 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-    public function login(Request $request){
-        $this->validateLogin($request);
+    public function login(Request $request)
+    {
+        // Validación solo con email y password
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+            // Quita 'name' a menos que realmente lo necesites
+        ]);
 
-        //login success
+        // Intento de login
         if (Auth::attempt($request->only('email', 'password'))) {
-            // Crea el token
-            $token = $request->user()->createToken('TokenName')->plainTextToken;
+            $user = Auth::user();
+            $token = $user->createToken('auth_token')->plainTextToken;
 
-            // Configura la cookie HttpOnly
+            // Devuelve datos del usuario y el token
             return response()->json([
-                'message' => 'Login exitoso'
-            ])
-            ->cookie('token', $token, 60, null, null, false, true);  // (nombre, valor, duración, ruta, dominio, seguro, HttpOnly)
+                'user' => [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    // Otros campos que quieras compartir
+                ],
+                'message' => 'Login exitoso',
+                'token' => $token // También incluir el token en JSON puede ser útil
+            ])->cookie('token', $token, 60, null, null, false, true);
         }
 
         return response()->json([
-                'menssage'=>'Unauthorized'
-            ], 401);
-
-        //login failed
-
+            'message' => 'Credenciales incorrectas'
+        ], 401);
     }
 
     public function logout()
@@ -37,15 +46,38 @@ class LoginController extends Controller
         auth()->user()->tokens()->delete();
 
         return response()->json([
-            'message' => 'Logged out'
-        ]);
+            'message' => 'Sesión cerrada correctamente'
+        ])->cookie('token', '', -1); // Elimina la cookie del token
     }
 
-    public function validateLogin(Request $request){
+    // Si realmente necesitas validación como método separado
+    protected function validateLogin(Request $request)
+    {
         return $request->validate([
             'email' => 'required|email',
             'password' => 'required',
-            'name' => 'required'
+            // Quita 'name' a menos que lo necesites
         ]);
+    }
+
+    // Método para obtener el usuario autenticado
+    public function user()
+    {
+        $usuario = auth()->user();
+        if (!$usuario) {
+            return response()->json(['message' => 'No autenticado'], 401);
+        }
+
+        return response()->json(
+            [
+                'user' => [
+                    'id' => $usuario->id,
+                    'name' => $usuario->name,
+                    'email' => $usuario->email,
+                    // Otros campos que quieras compartir
+                ],
+                'message' => 'Usuario autenticado'
+            ]
+        );
     }
 }

@@ -14,8 +14,9 @@ Route::apiResource('posts', PostController::class)->only('index', 'show', 'destr
 Route::get('home', [PostController::class, 'Home']);
 
 //Login
+Route::get('login', [LoginController::class, 'user'])->name('user')->middleware('auth:sanctum');
 
-Route::post('login', [LoginController::class, 'login']);
+Route::post('login', [LoginController::class, 'login'])->name('login');
 
 Route::middleware('auth:sanctum')->post('logout', [LoginController::class, 'logout']);
 
