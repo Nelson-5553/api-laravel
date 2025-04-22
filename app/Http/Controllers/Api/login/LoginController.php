@@ -13,13 +13,15 @@ class LoginController extends Controller
         $this->validateLogin($request);
 
         //login success
-        if (Auth::attempt($request->only('email', 'password'))){
-            return response()->json(
-                [
-                    'token' => $request->user()->createToken($request->name)->plainTextToken,
-                    'menssage' => 'Succes'
-                ]
-            );
+        if (Auth::attempt($request->only('email', 'password'))) {
+            // Crea el token
+            $token = $request->user()->createToken('TokenName')->plainTextToken;
+
+            // Configura la cookie HttpOnly
+            return response()->json([
+                'message' => 'Login exitoso'
+            ])
+            ->cookie('token', $token, 60, null, null, false, true);  // (nombre, valor, duración, ruta, dominio, seguro, HttpOnly)
         }
 
         return response()->json([
