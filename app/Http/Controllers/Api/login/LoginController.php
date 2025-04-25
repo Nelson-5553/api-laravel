@@ -41,13 +41,15 @@ class LoginController extends Controller
         ], 401);
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
-        auth()->user()->tokens()->delete();
+        if (auth()->check()) {
+            auth()->user()->tokens()->delete();
+        }
 
         return response()->json([
             'message' => 'Sesión cerrada correctamente'
-        ])->cookie('token', '', -1); // Elimina la cookie del token
+        ])->cookie('token', '', -1, '/', null, true, true, false, 'None');
     }
 
     // Si realmente necesitas validación como método separado
